@@ -1,0 +1,1 @@
+web: gunicorn YABA.wsgi —-log-file -
