@@ -134,3 +134,6 @@ def edit_goal(request, goal_id):
         return render(request, "dashboard/edit_goal.html", {
             "goal": goal,
         })
+
+def acme_challenge(request):
+    return HttpResponse("M3m2WeBMpGxGeMD8DPR6LMvzP93nmlHSq2jjiQG6DX0.xJWc3jMocrApnPhYP7Kw3tXWvavXDmXaOU-ct6WfU0c")
