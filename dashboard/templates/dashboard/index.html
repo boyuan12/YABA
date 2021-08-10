@@ -1,0 +1,48 @@
+{% extends "authentication/base.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+    <div class="col-3">
+        <h3>Accounts</h3>
+        <h5 id="totalCash">Cash</h5>
+        <div id="cash"></div>
+    </div>
+
+    <script>
+        var totalCash = 0;
+
+        fetch("https://gist.githubusercontent.com/Fluidbyte/2973986/raw/5fda5e87189b066e11c1bf80bbfbecb556cf2cc1/Common-Currency.json")
+        .then(resp => resp.json())
+        .then(currency_code => {
+            fetch("/plaid/auth/", {
+
+            })
+            .then(response => response.json())
+            .then(data => {
+                for (var i = 0; i < data.accounts.length; i++) {
+                    console.log(data)
+                    var DIV = document.createElement("div")
+                    DIV.innerHTML = `*${data.accounts[i].mask}, ${currency_code[data.accounts[i].balances.iso_currency_code].symbol}<b>${data.accounts[i].balances.available}</b>`
+
+                    totalCash += data.accounts[i].balances.available
+
+                    fetch(`/plaid/inst_name?inst_id=${data.item.institution_id}`)
+                    .then(response => response.json())
+                    .then(d => {
+                        console.log(d.institution)
+                        DIV.innerHTML += " <br><i>" + d.institution + "</i>"
+                    })
+
+                    document.getElementById("cash").appendChild(DIV);
+                }
+                document.getElementById("totalCash").innerHTML = `Cash ${totalCash}`
+            })
+        })
+
+        console.log(totalCash)
+
+    </script>
+{% endblock %}

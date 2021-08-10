@@ -1,0 +1,74 @@
+{% extends "authentication/base.html" %}
+
+{% block title %}
+    Goals
+{% endblock %}
+
+{% block main %}
+    {% load mathfilters %}
+    {% load predict %}
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="goal">Title</label>
+                        <input type="text" class="form-control" id="goal" name="title" placeholder="Title">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount</label>
+                        <input type="number" class="form-control" id="amount" name="amount" placeholder="Amount">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date">
+                    </div>
+                    <button type="submit" class="btn btn-success">Add Goal</button>
+                </form>
+            </div>
+            <div class="col-8">
+                {% for goal in cg %}
+                    <div class="card" style="width: 30rem;">
+                        <div class="card-body">
+                        <h5 class="card-title">{{ goal.title }}</h5>
+                        <p class="card-text">{{ goal.description }}</p>
+                        <p class="card-text">
+                            Amount: ${{ goal.amount }}<br>
+                            End Date: {{ goal.end_date }}<br>
+                        </p>
+                        <div class="progress">
+                            <div class="progress-bar {% if current.accounts.0.balances.available|div:goal.amount|mul:100|intdiv:1 >= 100 %}bg-success{% else %}{% endif %}" role="progressbar" style="width: {{ current.accounts.0.balances.available|div:goal.amount|mul:100|intdiv:1 }}%"  aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">{{ current.accounts.0.balances.available|div:goal.amount|mul:100|intdiv:1 }}%</div>
+                        </div>
+                        </div>
+                    </div>
+                    <br>
+                {% endfor %}
+                <h3>Completed Goals</h3>
+                {% for goal in ig %}
+                    <div class="card" style="width: 30rem;">
+                        <div class="card-body">
+                        <h5 class="card-title">{{ goal.title }}</h5>
+                        <p class="card-text">{{ goal.description }}</p>
+                        <p class="card-text">
+                            Amount: ${{ goal.amount }}<br>
+                            End Date: {{ goal.end_date }}<br>
+                        </p>
+                        <div class="progress">
+                            <div class="progress-bar {% if current.accounts.0.balances.available|div:goal.amount|mul:100|intdiv:1 >= 100 %}bg-success{% else %}{% endif %}" role="progressbar" style="width: {{ current.accounts.0.balances.available|div:goal.amount|mul:100|intdiv:1 }}%"  aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">{{ current.accounts.0.balances.available|div:goal.amount|mul:100|intdiv:1 }}%</div>
+                        </div>
+                        </div>
+                    </div>
+                    <br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

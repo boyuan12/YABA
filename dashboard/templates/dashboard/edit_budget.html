@@ -1,0 +1,21 @@
+{% extends "authentication/base.html" %}
+
+{% block title %}
+    Budget
+{% endblock %}
+
+{% block main %}
+    <h2>Edit New Budget</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h4>Type: {{ category }}</h4>
+        <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" id="amount" name="amount" value="{{ budget.amount }}">
+            <span class="input-group-text">.00</span>
+        </div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+
+
+{% endblock %}

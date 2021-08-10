@@ -1,0 +1,42 @@
+{% extends "authentication/base.html" %}
+
+{% block title %}
+    Budget
+{% endblock %}
+
+{% block main %}
+    <h2>Add New Budget</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <select name="category" id="budget" class="form-select">
+                <option value="">Select a budget</option>
+                {% for c in categories %}
+                    <option value="{{c.category_id}}">{{c.hierarchy|join:"/"}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <br>
+        <div class="input-group mb-3">
+            <span class="input-group-text">$</span>
+            <input type="number" class="form-control" aria-label="Amount (to the nearest dollar)" id="amount" placeholder="Amount" name="amount">
+            <span class="input-group-text">.00</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+    {% load mathfilters %}
+    {% for b in budgets %}
+        <div class="card" style="width: 30rem;">
+            <div class="card-body">
+            <h5 class="card-title">Budget of {{ b.3 }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">${{ b.1 }} of ${{ b.0.amount }}</h6>
+            <div class="progress">
+                <div class="progress-bar {% if b.1 > b.0.amount %} bg-danger {% else %} bg-success {% endif %}" role="progressbar" style="width: {{ b.1|div:b.0.amount|mul:100|intdiv:1 }}%"  aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock %}
