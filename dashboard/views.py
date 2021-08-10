@@ -20,14 +20,28 @@ def index(request):
     })
 
 def transactions(request):
-    data = _get_transactions(request.session['access_token'], 8, 2021)
+    m = None
+    y = None
+    if request.GET.get("month") is not None:
+        m = int(request.GET.get("month"))
+        y = int(request.GET.get("year"))
+
+    if m == None:
+        data = _get_transactions(request.session['access_token'])
+    else:
+        data = _get_transactions(request.session['access_token'], m, y)
+
     spending = 0
     income = 0
-    for t in data["transactions"]:
-        if t["amount"] > 0:
-            spending += t["amount"]
-        else:
-            income += t["amount"] * -1
+    try:
+        for t in data["transactions"]:
+            if t["amount"] > 0:
+                spending += t["amount"]
+            else:
+                income += t["amount"] * -1
+    except KeyError:
+        return HttpResponse("Unable to fetch transaction data")
+
     return render(request, "dashboard/transactions.html", {
         "transactions": data,
         "spending": spending,
@@ -82,8 +96,17 @@ def budget(request):
 
         budgets_formatted = []
         budgets = Budget.objects.filter(user=request.user)
+        m = None
+
+        if request.GET.get("month") is not None:
+            m = int(request.GET.get("month"))
+
         for b in budgets:
-            count, amount = _get_transaction_by_category_id(request.session['access_token'], b.category, 7, 2021)
+            if m == None:
+                count, amount = _get_transaction_by_category_id(request.session['access_token'], b.category)
+            else:
+                count, amount = _get_transaction_by_category_id(request.session['access_token'], b.category, m, 2021)
+
             budgets_formatted.append([
                 b,
                 amount,
