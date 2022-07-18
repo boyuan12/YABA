@@ -14,7 +14,7 @@
     <script>
         var totalCash = 0;
 
-        fetch("https://api.jsonbin.io/b/6285a04225069545a33cc9bb")
+        fetch("https://gist.githubusercontent.com/boyuan12/5e2f28d8e8a31be4bf872497a63a5d8d/raw/5fda5e87189b066e11c1bf80bbfbecb556cf2cc1/Common-Currency.json")
         .then(resp => resp.json())
         .then(currency_code => {
             fetch("/plaid/auth/", {
