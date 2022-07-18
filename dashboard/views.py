@@ -16,7 +16,7 @@ def oauth_response(request):
 def index(request):
     print(request.session.get("access_token"))
     return render(request, "dashboard/index.html", {
-        "currency_code": requests.get("https://gist.githubusercontent.com/Fluidbyte/2973986/raw/5fda5e87189b066e11c1bf80bbfbecb556cf2cc1/Common-Currency.json").json()
+        "currency_code": requests.get("https://gist.githubusercontent.com/boyuan12/5e2f28d8e8a31be4bf872497a63a5d8d/raw/5fda5e87189b066e11c1bf80bbfbecb556cf2cc1/Common-Currency.json").json()
     })
 
 def transactions(request):
